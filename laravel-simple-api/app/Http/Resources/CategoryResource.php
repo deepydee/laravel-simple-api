@@ -17,6 +17,7 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'photo' => env('APP_URL') . $this->photo,
         ];
     }
 }

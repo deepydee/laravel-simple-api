@@ -23,6 +23,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'photo' => 'nullable',
         ];
     }
 }

@@ -17,6 +17,8 @@ class Product extends Model
         'price',
     ];
 
+    public const PER_PAGE = 10;
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

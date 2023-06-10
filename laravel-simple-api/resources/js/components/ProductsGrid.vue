@@ -1,7 +1,7 @@
 <template>
     <div class="container px-4 px-lg-5 mt-5" :class="{ 'loading': loading }">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            <div v-for="product in products" class="col mb-5">
+            <div v-for="product in products.data" class="col mb-5">
                 <div class="card h-100">
                     <!-- Product image-->
                     <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
@@ -26,31 +26,47 @@
                 </div>
             </div>
         </div>
+        <Bootstrap5Pagination :data="products" @pagination-change-page="getProducts" class="justify-content-center" />
     </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            products: [],
-            loading: true,
-        }
-    },
-    methods: {
-        getProducts() {
-            axios.get('/api/products')
-                .then((response) => {
-                    this.products = response.data.data;
-                    this.loading = false;
-                })
-                .catch((error) => {
-                    console.error(error.message);
-                });
-        }
-    },
-    mounted() {
-        this.getProducts();
-    }
+<script setup>
+import { ref } from 'vue';
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
+
+let loading = ref(true);
+let products = ref({});
+
+const getProducts = async (page = 1) => {
+    const response = await fetch(`/api/products?page=${page}&per_page=3`);
+    products.value = await response.json();
+    loading.value = false;
 }
+
+getProducts();
+
+// export default {
+//     data() {
+//         return {
+//             products: [],
+//             loading: true,
+//         }
+//     },
+//     methods: {
+//         getProducts(page = 1) {
+//             axios.get(`/api/products?page=${page}`)
+//                 .then((response) => {
+//                     this.products = response.data.data;
+//                     this.loading = false;
+//                 })
+//                 .catch((error) => {
+//                     console.error(error.message);
+//                 });
+//         }
+//     },
+//     mounted() {
+//         this.getProducts();
+//     }
+// }
+
 </script>

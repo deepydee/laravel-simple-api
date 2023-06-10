@@ -4,30 +4,45 @@
         <li>
             <hr class="dropdown-divider" />
         </li>
-        <li v-for="category in categories"><a class="dropdown-item" href="#!">{{ category.name }}</a></li>
+        <li v-for="category in categories.data"><a class="dropdown-item" href="#!">{{ category.name }}</a></li>
     </ul>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            categories: []
-        }
-    },
-    methods: {
-        getCategories() {
-            axios.get('/api/categories')
-                .then((response) => {
-                    this.categories = response.data.data;
-                })
-                .catch((error) => {
-                    console.error(error.message);
-                });
-        }
-    },
-    mounted() {
-        this.getCategories();
-    }
-}
+<script setup>
+import { ref } from 'vue';
+
+let categories = ref({});
+
+const getCategories = () => {
+    axios.get('/api/categories')
+        .then((response) => {
+            categories.value = response.data
+        })
+        .catch((error) => {
+            console.error(error.message);
+        });
+};
+
+getCategories();
+// export default {
+//     data() {
+//         return {
+//             categories: []
+//         }
+//     },
+//     methods: {
+//         getCategories() {
+//             axios.get('/api/categories')
+//                 .then((response) => {
+//                     this.categories = response.data.data;
+//                 })
+//                 .catch((error) => {
+//                     console.error(error.message);
+//                 });
+//         }
+//     },
+//     mounted() {
+//         this.getCategories();
+//     }
+// }
 </script>
